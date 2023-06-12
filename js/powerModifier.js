@@ -301,7 +301,7 @@ var powerModifier = [
       trigger: "すなのちから",
       category: "ability",
       holder: "attacker",
-      modifier: 6144,
+      modifier: 5325,
       condition: function (n) {
         var t = n.metaMoveTypeId;
         return (
@@ -311,7 +311,7 @@ var powerModifier = [
         );
       },
       description:
-        "天候がすなあらしのとき、いわ、じめん、はがねタイプの技の威力1.5倍",
+        "天候がすなあらしのとき、いわ、じめん、はがねタイプの技の威力1.3倍",
     },
     {
       trigger: "たいねつ",

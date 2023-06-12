@@ -201,10 +201,8 @@ function makeCalcDamageList(attacker,defender,environment){
             }
         }
 
-        //テラスタルタイプと技タイプが一致し、技威力６０未満、連続技、先制技じゃない場合　威力を６０にする。
-        if(attacker.moves[key][2] < 60 && attacker.moves[key][0] == attacker.teraTypeId && attacker.moves[key][8] == 0 && attacker.moves[key][10] == 0){
-            attacker.moves[key][2] = 60;
-        }
+
+        
         //技威力を格納
         damageCalc.movePower = attacker.moves[key][2];
 
@@ -234,6 +232,13 @@ function makeCalcDamageList(attacker,defender,environment){
         //TODO　、ダメおしの威力2倍は補正値ではなく、威力の部分が倍
         damageCalc.finalPower = fiveDropFiveExtra(attacker.moves[key][2] * damageCalc.powerCorrection/4096);
         
+        //テラスタルタイプと技タイプが一致し、最終威力６０未満、連続技、先制技じゃない場合　威力を６０にする。
+        if(damageCalc.finalPower < 60 && attacker.moves[key][0] == attacker.teraTypeId && attacker.moves[key][8] == 0 && attacker.moves[key][10] == 0){
+            damageCalc.finalPower = 60;
+            attacker.moves[key][2] = 60;
+            damageCalc.powerCorrectionDescription.push('テラスタルタイプと技タイプが一致し、最終威力６０未満、連続技、先制技じゃない場合、威力を６０');
+        }
+
         //1以下の場合は1に設定
         // if(damageCalc.finalPower < 1){
         //     damageCalc.finalPower = 1;
@@ -277,13 +282,14 @@ function makeCalcDamageList(attacker,defender,environment){
         //物理の場合・テラバーストで攻撃が高い場合・サイコショック・サイコブレイク・しんぴのつるぎ
         if((attacker.moves[key][1] == 1 || damageCalc.move == 'サイコショック'|| damageCalc.move == 'サイコブレイク'|| damageCalc.move == 'しんぴのつるぎ') &&!environment.condition["ワンダールーム"]){
             //雪でタイプが氷の場合
-            if(((defender.typeIds.indexOf(14) > 0 && defender.teraTypeId == null) || defender.teraTypeId == 14) && environment.weather == 'snow'){
+            if(((defender.typeIds.indexOf(14) >= 0 && defender.teraTypeId == null) || defender.teraTypeId == 14) && environment.weather == 'snow'){
                 if(damageCalc.move == 'せいなるつるぎ' || (attacker.ability == 'てんねん' && attacker.abilityActivated)){
                     damageCalc.finalDefence = fiveDropFiveExtra(Math.floor(Math.floor(defender.defenceActual) * 6144/4096)* damageCalc.defenceCorrection/4096);
                 }else{
                     damageCalc.finalDefence = fiveDropFiveExtra(Math.floor(Math.floor(defender.defenceActual * getrankCorrection(defender.defenceRank,'status','defender',damageCalc.defenderCriticalFlag)) * 6144/4096)* damageCalc.defenceCorrection/4096);
+                    damageCalc.defenceCorrectionDescription.push('天候補正:雪でタイプが氷の場合防御1.5倍');
                 }
-                damageCalcObj.defenceCorrectionDescription.push('天候補正:雪でタイプが氷の場合防御1.5倍');
+                
             }else{
                 if(damageCalc.move == 'せいなるつるぎ' || (attacker.ability == 'てんねん' && attacker.abilityActivated)){
                     damageCalc.finalDefence = fiveDropFiveExtra(Math.floor(defender.defenceActual) * damageCalc.defenceCorrection/4096);
@@ -293,14 +299,15 @@ function makeCalcDamageList(attacker,defender,environment){
             }
         }else{  
             //特殊の場合
-            if(((defender.typeIds.indexOf(5) > 0 && defender.teraTypeId == null) || defender.teraTypeId == 5) && environment.weather == 'sandstorm'){
+            if(((defender.typeIds.indexOf(5) >= 0 && defender.teraTypeId == null) || defender.teraTypeId == 5) && environment.weather == 'sandstorm'){
                 //砂でタイプが岩の場合
                 if(attacker.ability == 'てんねん' && attacker.abilityActivated){
                     damageCalc.finalDefence = fiveDropFiveExtra(Math.floor(Math.floor(defender.spDefenceActual)* 6144/4096) * damageCalc.defenceCorrection/4096);
                 }else{
                     damageCalc.finalDefence = fiveDropFiveExtra(Math.floor(Math.floor(defender.spDefenceActual * getrankCorrection(defender.spDefenceRank,'status','defender',damageCalc.defenderCriticalFlag))* 6144/4096) * damageCalc.defenceCorrection/4096);
+                    damageCalc.defenceCorrectionDescription.push('天候補正:砂でタイプが岩の場合特防1.5倍');
                 }
-                    damageCalcObj.defenceCorrectionDescription.push('天候補正:砂でタイプが岩の場合特防1.5倍');
+                
             }else{
                 if(attacker.ability == 'てんねん' && attacker.abilityActivated){
                     damageCalc.finalDefence = fiveDropFiveExtra(Math.floor(defender.spDefenceActual) * damageCalc.defenceCorrection/4096);
