@@ -29,7 +29,7 @@ function makeTableBody(pokeNo){
         tr = tr +   '<td><input type="number" class="'+ pokeStatusParamList[i] + ' ' + pokeStatusNameList[1]+'" value="31" min = 0 max = 31>';
         tr = tr +   '<button type="button" class="'+ pokeStatusParamList[i] + ' ' + pokeStatusNameList[1]+'DisplayOnlySmallScreen plus">+</button>';
         tr = tr +   '<button type="button" class="'+ pokeStatusParamList[i] + ' ' + pokeStatusNameList[1]+'DisplayOnlySmallScreen minus">-</button></td>';
-        tr = tr +   '<td><input type="number" class="'+ pokeStatusParamList[i] + ' ' + pokeStatusNameList[2]+'" value="0" min = 0 max = 252>';
+        tr = tr +   '<td><input type="number" class="'+ pokeStatusParamList[i] + ' ' + pokeStatusNameList[2]+'" value="0" min = 0 max = 252 step="4">';
         tr = tr +   '<button type="button" class="'+ pokeStatusParamList[i] + ' ' + pokeStatusNameList[2]+'DisplayOnlySmallScreen plus">+</button>';
         tr = tr +   '<button type="button" class="'+ pokeStatusParamList[i] + ' ' + pokeStatusNameList[2]+'DisplayOnlySmallScreen minus">-</button></td>';
         if(pokeStatusParamList[i] == 'hp'){
